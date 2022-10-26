@@ -1,0 +1,21 @@
+{
+  "name": "ashuramarudev",
+  "version": "0.0.1",
+  "description": "Discord bot to check/confirm/pay orders",
+  "main": "ashu.js",
+  "scripts": {
+    "build": "node ashu.js"
+  },
+  "keywords": [
+    "discord.js",
+    "discord",
+    "bot",
+    "orders"
+  ],
+  "author": "nightidk (night.)",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.6.0",
+    "dotenv": "^16.0.3"
+  }
+}
