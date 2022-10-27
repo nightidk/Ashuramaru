@@ -5,5 +5,5 @@
 
 
 > Developer: nightidk (AKA night.)<br>
-> Developer Discord: night.#0666<br>
+> Developer's Discord: night.#0666<br>
 > [Bot's server (Discord)](https://discord.gg/Mh5ggRyBhK)
