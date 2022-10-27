@@ -27,7 +27,7 @@ async function loadEvents(client) {
             else client.on(event.name, execute);
         }
 
-        table.addRow(event.name, "🟢");
+        table.addRow(file.replace(".js", "").split("/").at(-1), "🟢");
     });
 
     return console.log(table.toString(), "\nLoaded events.");
