@@ -37,6 +37,10 @@ const orders = new Schema({
         type: Number,
         required: true,
     },
+    nameOfBot: {
+        type: String,
+        required: true,
+    },
 });
 
 module.exports = model("order", orders);
