@@ -1,7 +1,8 @@
-const { ButtonInteraction, Client } = require("discord.js");
+const { ButtonInteraction, Client, Events } = require("discord.js");
+const localization = require("../../Configs/localization.json");
 
 module.exports = {
-    name: "interactionCreate",
+    name: Events.InteractionCreate,
     /**
      *
      * @param {ButtonInteraction} interaction
@@ -14,7 +15,7 @@ module.exports = {
         if (!button)
             return interaction.reply({
                 ephemeral: true,
-                content: "Invalid button, please dm developers about it.",
+                content: localization["ru"].errors.invalidButton,
             });
         else button.execute(interaction, client);
     },

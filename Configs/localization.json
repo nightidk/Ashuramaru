@@ -1,0 +1,16 @@
+{
+    "en": {
+        "errors": {
+            "commandOutdated": "This command is outdated.",
+            "onlyDevelopers": "This command is only available to the developers.",
+            "invalidButton": "Invalid button. Please dm developers about it."
+        }
+    },
+    "ru": {
+        "errors": {
+            "commandOutdated": "Эта команда не найдена.",
+            "onlyDevelopers": "Эта команда доступна только разработчикам.",
+            "invalidButton": "Кнопка не найдена. Пожалуйста, напишите об этом разработчикам."
+        }
+    }
+}

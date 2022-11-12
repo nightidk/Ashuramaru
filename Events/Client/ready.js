@@ -1,8 +1,8 @@
-const { Client, ActivityType } = require("discord.js");
+const { Client, ActivityType, Events } = require("discord.js");
 const { loadCommands } = require("../../Handlers/commandHandler");
 
 module.exports = {
-    name: "ready",
+    name: Events.ClientReady,
     once: true,
     /**
      *
