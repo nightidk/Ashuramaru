@@ -43,7 +43,7 @@ module.exports = {
                 {
                     await loadCommands(client);
                     await interaction.reply({
-                        content: "Reloaded Events",
+                        content: "Reloaded Commands",
                         ephemeral: true,
                     });
                 }

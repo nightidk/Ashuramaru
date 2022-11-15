@@ -1,5 +1,5 @@
 const { ChatInputCommandInteraction, Client, Events } = require("discord.js");
-const { developers } = require("../../Configs/config.json");
+const { developers, beta } = require("../../Configs/config.json");
 const localization = require("../../Configs/localization.json");
 
 module.exports = {
@@ -16,6 +16,16 @@ module.exports = {
         if (!command)
             return await interaction.reply({
                 content: localization["ru"].errors.commandOutdated,
+                ephemeral: true,
+            });
+
+        if (
+            command.beta &&
+            !beta.includes(interaction.user.id) &&
+            !developers.includes(interaction.user.id)
+        )
+            return interaction.reply({
+                content: localization["ru"].errors.onlyTesters,
                 ephemeral: true,
             });
 

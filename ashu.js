@@ -15,6 +15,7 @@ const {
     GuildMessages,
     GuildVoiceStates,
     MessageContent,
+    GuildPresences,
 } = GatewayIntentBits;
 const { User, Message, GuildMember, ThreadMember } = Partials;
 
@@ -25,6 +26,7 @@ const client = new Client({
         GuildMessages,
         GuildVoiceStates,
         MessageContent,
+        GuildPresences,
     ],
     partials: [User, Message, GuildMember, ThreadMember],
 });
@@ -66,7 +68,7 @@ connect(process.env.DATABASE, {})
     .catch((err) => console.log(`Error to connect to the database: ${err}`))
     .then(() => console.log("The client is now connected to the database."));
 
-// ------- DisTube --------
+// ------- DisTube -------- //
 const status = (queue) =>
     `Volume: \`${queue.volume}%\` | Filter: \`${
         queue.filters.names.join(", ") || "Off"
