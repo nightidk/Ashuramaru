@@ -5,6 +5,11 @@
             "onlyDevelopers": "This command is only available to the developers.",
             "invalidButton": "Invalid button. Please dm developers about it.",
             "onlyTesters": "This command is under beta testing."
+        },
+        "commands": {
+            "profile": {
+                "name": "Profile"
+            }
         }
     },
     "ru": {
@@ -13,6 +18,11 @@
             "onlyDevelopers": "Эта команда доступна только разработчикам.",
             "invalidButton": "Кнопка не найдена. Пожалуйста, напишите об этом разработчикам.",
             "onlyTesters": "Эта команда находится в стадии бета-тестирования."
+        },
+        "commands": {
+            "profile": {
+                "name": "Профиль"
+            }
         }
     }
 }

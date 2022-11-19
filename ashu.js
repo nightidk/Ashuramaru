@@ -64,6 +64,8 @@ client.distube = new DisTube(client, {
     nsfw: true,
 });
 
+client.setMaxListeners = 0;
+
 connect(process.env.DATABASE, {})
     .catch((err) => console.log(`Error to connect to the database: ${err}`))
     .then(() => console.log("The client is now connected to the database."));

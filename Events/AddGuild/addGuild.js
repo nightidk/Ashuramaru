@@ -1,27 +1,30 @@
 const {
-    ChatInputCommandInteraction,
-    Client,
     Events,
+    Guild,
+    Client,
     EmbedBuilder,
+    ChannelType,
+    AuditLogEvent,
     ActionRowBuilder,
     ButtonBuilder,
     ButtonStyle,
 } = require("discord.js");
-const { developers, beta } = require("../../Configs/config.json");
-const localization = require("../../Configs/localization.json");
 const guilds = require("../../Schemas/guilds");
 
 module.exports = {
-    name: Events.InteractionCreate,
+    name: Events.GuildCreate,
     /**
      *
-     * @param {ChatInputCommandInteraction} interaction
+     * @param {Guild} guild
      * @param {Client} client
      */
-    async execute(interaction, client) {
-        if (!interaction.isChatInputCommand()) return;
+    async execute(guild, client) {
+        if ((await guilds.count({ guildID: guild.id })) !== 0) return;
 
-        const guild = await guilds.findOne({ guildID: interaction.guildId });
+        const fetchedLog = await guild.fetchAuditLogs({
+            limit: 1,
+            type: AuditLogEvent.BotAdd,
+        });
 
         const numbers_en = {
             0: "th",
@@ -84,38 +87,23 @@ To begin with, please indicate in which language the bot will work.`),
             ),
         ];
 
-        if (!guild && interaction.memberPermissions.has("Administrator"))
-            return await interaction.reply({
+        if (guild.systemChannel)
+            await guild.systemChannel.send({
+                content: `${fetchedLog.entries.first().executor}`,
                 embeds: addedEmbeds,
                 components: languages,
-                ephemeral: true,
             });
-        else if (!guild && !interaction.memberPermissions.has("Administrator"))
-            return;
-
-        const command = client.commands.get(interaction.commandName);
-        if (!command)
-            return await interaction.reply({
-                content: localization[guild.language].errors.commandOutdated,
-                ephemeral: true,
-            });
-
-        if (
-            command.beta &&
-            !beta.includes(interaction.user.id) &&
-            !developers.includes(interaction.user.id)
-        )
-            return interaction.reply({
-                content: localization[guild.language].errors.onlyTesters,
-                ephemeral: true,
-            });
-
-        if (command.developer && !developers.includes(interaction.user.id))
-            return interaction.reply({
-                content: localization[guild.language].errors.onlyDevelopers,
-                ephemeral: true,
-            });
-
-        command.execute(interaction, client);
+        else
+            await (
+                await guild.channels.fetch()
+            )
+                .filter((c) => c.type == ChannelType.GuildText)
+                .sort((c1, c2) => c1.position > c2.position)
+                .map((c) => c)[0]
+                .send({
+                    content: `${fetchedLog.entries.first().executor}`,
+                    embeds: addedEmbeds,
+                    components: languages,
+                });
     },
 };

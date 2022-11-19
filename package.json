@@ -1,6 +1,6 @@
 {
     "name": "ashuramarudev",
-    "version": "0.2.0b",
+    "version": "0.4.6b",
     "description": "Discord bot to check/confirm/pay orders",
     "main": "ashu.js",
     "scripts": {

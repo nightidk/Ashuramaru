@@ -5,19 +5,24 @@ const {
     AttachmentBuilder,
     ImageFormat,
     PresenceUpdateStatus,
+    EmbedBuilder,
 } = require("discord.js");
 const userDB = require("../../Schemas/user");
 const Canvas = require("canvas");
+const guilds = require("../../Schemas/guilds");
+const localization = require("../../Configs/localization.json");
 
 module.exports = {
     beta: true,
     data: new SlashCommandBuilder()
         .setName("profile")
+        .setNameLocalization("ru", "профиль")
         .setDescription("View user's profile")
         .setDescriptionLocalization("ru", "Просмотр профиля пользователя")
         .addUserOption((options) =>
             options
                 .setName("user")
+                .setNameLocalization("ru", "пользователь")
                 .setDescription("The user, whose profile you want to see")
                 .setDescriptionLocalization(
                     "ru",
@@ -31,12 +36,15 @@ module.exports = {
      * @param {Client} client
      */
     async execute(interaction, client) {
+        await interaction.deferReply();
         const member =
             interaction.options.getMember("user") ?? interaction.member;
         // const user = await userDB.findOne({
         //     userID: interaction.member.id,
         //     guildID: interaction.guildId,
         // });
+
+        const guild = await guilds.findOne({ guildID: interaction.guildId });
 
         const canvas = new Canvas.Canvas(1920, 1080, "image");
         const ctx = canvas.getContext("2d");
@@ -45,10 +53,14 @@ module.exports = {
         });
 
         const backgroundImage = await Canvas.loadImage(
-            `${process.cwd()}/Images/Profile/profile_background.png`
+            `${process.cwd()}/Images/${
+                guild.language
+            }/Profile/profile_background.png`
         );
         const previewImage = await Canvas.loadImage(
-            `${process.cwd()}/Images/Profile/preview_image_default.png`
+            `${process.cwd()}/Images/${
+                guild.language
+            }/Profile/preview_image_default.png`
         );
 
         ctx.drawImage(backgroundImage, 0, 0);
@@ -79,19 +91,19 @@ module.exports = {
 
         if (member.presence?.status === PresenceUpdateStatus.Online)
             statusImage = await Canvas.loadImage(
-                `${process.cwd()}/Images/Profile/Statuses/OnlineStatus.png`
+                `${process.cwd()}/Images/Statuses/OnlineStatus.png`
             );
         else if (member.presence?.status === PresenceUpdateStatus.Idle)
             statusImage = await Canvas.loadImage(
-                `${process.cwd()}/Images/Profile/Statuses/IdleStatus.png`
+                `${process.cwd()}/Images/Statuses/IdleStatus.png`
             );
         else if (member.presence?.status === PresenceUpdateStatus.DoNotDisturb)
             statusImage = await Canvas.loadImage(
-                `${process.cwd()}/Images/Profile/Statuses/DnDStatus.png`
+                `${process.cwd()}/Images/Statuses/DnDStatus.png`
             );
         else
             statusImage = await Canvas.loadImage(
-                `${process.cwd()}/Images/Profile/Statuses/OfflineStatus.png`
+                `${process.cwd()}/Images/Statuses/OfflineStatus.png`
             );
 
         ctx.shadowColor =
@@ -123,7 +135,25 @@ module.exports = {
         );
         clearAll(ctx);
 
-        await interaction.reply({
+        await interaction.editReply({
+            embeds: [
+                new EmbedBuilder()
+                    .setColor(0x2f3136)
+                    .setAuthor({
+                        name: `${
+                            localization[guild.language].commands.profile.name
+                        } • ${member.user.tag}`,
+                        iconURL: member.displayAvatarURL({ dynamic: true }),
+                    })
+                    .setImage(`attachment://profile-${member.id}.png`)
+                    .setTimestamp()
+                    .setFooter({
+                        text: interaction.member.displayName,
+                        iconURL: interaction.member.displayAvatarURL({
+                            dynamic: true,
+                        }),
+                    }),
+            ],
             files: [
                 new AttachmentBuilder()
                     .setFile(canvas.toBuffer())
